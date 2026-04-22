@@ -126,25 +126,91 @@
             text-align: left;
         }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+/* التصميم الأصلي للظرف المستطيل */
+.exact-envelope {
+    width: 320px;
+    height: 500px;
+    background-color: #0c1425; /* Midnight Navy */
+    border: 8px solid #c5a059; /* Gold */
+    position: relative;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px 20px;
+    box-shadow: 0 40px 100px rgba(0,0,0,0.4);
+    transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* الحبل المربوط (الورقة المربوطة بحبل) */
+.rope-container {
+    position: absolute;
+    inset: -15px; /* يبرز قليلاً عن الظرف */
+    border: 3px dashed #c5a059;
+    border-radius: 12px;
+    z-index: 100;
+    pointer-events: none;
+    transition: all 0.7s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+/* عقدة الحبل (الختم الذي يربط الحبل) */
+.rope-knot {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 60px;
+    height: 60px;
+    background: #c5a059;
+    border-radius: 50%;
+    border: 4px solid #0c1425;
+    z-index: 110;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 20px rgba(197,160,89,0.5);
+    transition: all 0.5s ease;
+}
+
+/* حالة الفك (عند النقر) */
+.untying .rope-container {
+    transform: scale(1.4) rotate(10deg);
+    opacity: 0;
+}
+
+.untying .rope-knot {
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 0;
+}
+
+.untying.exact-envelope {
+    transform: translateY(-100vh) rotate(-5deg);
+    opacity: 0;
+}
+
     </style>
 </head>
 <body>
 
     <!-- Intro Envelope Screen -->
-    <div id="intro-overlay">
-        <div class="exact-envelope" onclick="openInvitation()">
-            <div class="inner-border"></div>
-            <div class="gold-circle">
-                <span class="seal-initials">Y&A</span>
-            </div>
-            <h2 class="inv-label">Wedding Invitation</h2>
-            <div class="gold-line"></div>
-            <p class="envelope-names">Yasser & Aya</p>
-            <div class="tap-msg">Tap To Reveal</div>
-            <div class="env-date">April 27, 2026</div>
+    <div id="intro-overlay" class="flex items-center justify-center bg-[#f0ede4]">
+    <div class="exact-envelope" id="main-env" onclick="uniteAndOpen()">
+        <div class="rope-container" id="rope-wrap"></div>
+        <div class="rope-knot" id="knot-seal">
+            <span class="font-luxury font-bold text-navy text-xs">Y&A</span>
         </div>
-    </div>
 
+        <div class="inner-border"></div>
+        <div class="gold-circle mt-10">
+            <span class="seal-initials">Y&A</span>
+        </div>
+        <h2 class="inv-label mt-4">Wedding Invitation</h2>
+        <div class="gold-line my-8"></div>
+        <p class="envelope-names">Yasser & Aya</p>
+        <div class="tap-msg mt-auto mb-6">Tap To Reveal</div>
+        <div class="env-date">April 27, 2026</div>
+    </div>
+</div>
     <!-- Main Content -->
     <div id="main-content" class="hidden">
         
@@ -168,30 +234,83 @@
         </section>
 
         <!-- Countdown -->
-        <section class="py-24 bg-[#fdfaf6] border-y border-gold/10">
+                <section class="py-24 bg-[#fdfaf6] border-y border-gold/10 overflow-hidden">
             <div class="max-w-4xl mx-auto px-6 text-center reveal">
-                <h3 class="font-luxury text-lg tracking-[0.4em] mb-16 text-gray-400 font-bold uppercase">The Countdown to Forever</h3>
-                <div class="grid grid-cols-4 gap-4 md:gap-12" id="timer">
+                
+                <h3 class="font-luxury text-lg tracking-[0.4em] mb-12 text-gray-400 font-bold uppercase italic">The Countdown to Forever</h3>
+                <div class="grid grid-cols-4 gap-4 md:gap-12 mb-24" id="timer">
                     <div class="bg-white p-6 rounded-3xl shadow-sm border border-gold/5 transition-transform hover:scale-105 duration-300">
-                        <span id="days" class="text-4xl md:text-6xl font-luxury font-bold text-[#1e293b]">00</span>
-                        <p class="text-[10px] uppercase tracking-widest mt-4 opacity-40 font-bold">Days</p>
+                        <span id="days" class="text-4xl md:text-6xl font-luxury font-bold text-navy">00</span>
+                        <p class="text-[9px] uppercase tracking-widest mt-4 opacity-40 font-bold">Days</p>
                     </div>
                     <div class="bg-white p-6 rounded-3xl shadow-sm border border-gold/5 transition-transform hover:scale-105 duration-300">
-                        <span id="hours" class="text-4xl md:text-6xl font-luxury font-bold text-[#1e293b]">00</span>
-                        <p class="text-[10px] uppercase tracking-widest mt-4 opacity-40 font-bold">Hours</p>
+                        <span id="hours" class="text-4xl md:text-6xl font-luxury font-bold text-navy">00</span>
+                        <p class="text-[9px] uppercase tracking-widest mt-4 opacity-40 font-bold">Hours</p>
                     </div>
                     <div class="bg-white p-6 rounded-3xl shadow-sm border border-gold/5 transition-transform hover:scale-105 duration-300">
-                        <span id="minutes" class="text-4xl md:text-6xl font-luxury font-bold text-[#1e293b]">00</span>
-                        <p class="text-[10px] uppercase tracking-widest mt-4 opacity-40 font-bold">Mins</p>
+                        <span id="minutes" class="text-4xl md:text-6xl font-luxury font-bold text-navy">00</span>
+                        <p class="text-[9px] uppercase tracking-widest mt-4 opacity-40 font-bold">Mins</p>
                     </div>
                     <div class="bg-white p-6 rounded-3xl shadow-sm border border-gold/5 transition-transform hover:scale-105 duration-300">
-                        <span id="seconds" class="text-4xl md:text-6xl font-luxury font-bold text-[#1e293b]">00</span>
-                        <p class="text-[10px] uppercase tracking-widest mt-4 opacity-40 font-bold">Secs</p>
+                        <span id="seconds" class="text-4xl md:text-6xl font-luxury font-bold text-navy">00</span>
+                        <p class="text-[9px] uppercase tracking-widest mt-4 opacity-40 font-bold">Secs</p>
+                    </div>
+                </div>
+
+                <div class="max-w-md mx-auto reveal relative">
+                    <div class="absolute -top-6 -right-4 z-20 text-2xl animate-bounce">🦋</div>
+                    
+                    <div class="bg-white/90 backdrop-blur-md p-10 rounded-[3rem] shadow-2xl border border-gold/20 relative group">
+                        <div class="relative">
+                            <div class="flex justify-between items-center mb-10 px-2">
+                                <span class="text-navy font-luxury text-3xl tracking-tighter font-bold">APRIL <span class="text-gold">2026</span></span>
+                                <div class="flex gap-4 text-gold/40">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-7 text-[10px] font-bold text-navy/30 mb-8 tracking-widest uppercase font-sans">
+                                <div>Sun</div><div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div>
+                            </div>
+
+                            <div class="grid grid-cols-7 gap-y-5 text-sm font-luxury text-navy/80">
+                                <div class="opacity-10">29</div><div class="opacity-10">30</div><div class="opacity-10">31</div>
+                                
+                                <div class="opacity-30">1</div><div class="opacity-30">2</div><div class="opacity-30">3</div><div class="opacity-30">4</div>
+                                <div class="opacity-30">5</div><div class="opacity-30">6</div><div class="opacity-30">7</div><div class="opacity-30">8</div>
+                                <div class="opacity-30">9</div><div class="opacity-30">10</div><div class="opacity-30">11</div><div class="opacity-30">12</div>
+                                <div class="opacity-30">13</div><div class="opacity-30">14</div><div class="opacity-30">15</div><div class="opacity-30">16</div>
+                                <div class="opacity-30">17</div><div class="opacity-30">18</div><div class="opacity-30">19</div><div class="opacity-30">20</div>
+                                <div class="opacity-30">21</div>
+
+                                <div class="relative flex items-center justify-center">
+                                    <div class="absolute inset-0 border border-gold/30 rounded-full scale-110"></div>
+                                    <span class="text-navy font-bold">22</span>
+                                </div>
+
+                                <div class="opacity-30">23</div><div class="opacity-30">24</div><div class="opacity-30">25</div><div class="opacity-30">26</div>
+
+                                <div class="relative flex items-center justify-center group/day">
+                                    <div class="absolute inset-0 bg-gold rounded-full scale-100 shadow-lg shadow-gold/30 animate-pulse"></div>
+                                    <span class="relative text-white font-black z-10 text-base">27</span>
+                                    <div class="absolute -top-10 left-1/2 -translate-x-1/2 bg-navy text-white text-[8px] font-bold px-3 py-1.5 rounded-full opacity-0 group-hover/day:opacity-100 transition-all shadow-xl whitespace-nowrap uppercase tracking-widest z-20">
+                                        Our Big Day ✨
+                                    </div>
+                                </div>
+
+                                <div class="opacity-30">28</div><div class="opacity-30">29</div><div class="opacity-30">30</div>
+                            </div>
+                            
+                            <button onclick="addToGoogleCalendar()" class="mt-14 inline-flex items-center gap-2 text-[10px] text-gold font-bold tracking-[0.3em] uppercase group cursor-pointer">
+                                <span class="border-b border-gold/20 group-hover:border-gold transition-all">+ Save Event to Calendar</span>
+                                <span class="text-xs">❤️</span>
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
         </section>
-
         <!-- Milestones Section -->
         <section class="py-32 px-6 bg-white">
             <div class="max-w-3xl mx-auto">
@@ -298,13 +417,9 @@
                         <input type="text" id="gName" placeholder="YOUR FULL NAME" class="w-full bg-cream/30 border-b-2 border-gray-100 py-5 px-4 focus:outline-none focus:border-gold font-sans text-xs tracking-widest uppercase font-bold transition-colors">
                         <textarea id="gMsg" rows="3" placeholder="CONGRATULATIONS & SWEET MESSAGES..." class="w-full bg-cream/30 border-b-2 border-gray-100 py-5 px-4 focus:outline-none focus:border-gold font-sans text-xs tracking-widest uppercase font-bold resize-none transition-colors"></textarea>
                         
-                        <div class="text-center pt-8">
-                            <button onclick="submitGuestbook()" class="w-full bg-gold text-white py-6 rounded-[1.5rem] font-sans text-[11px] font-bold tracking-[0.4em] shadow-xl hover:bg-[#b39373] transition-all uppercase">
-                                Send Love & Confirm
-                            </button>
-                        </div>
-                    </div>
-
+                        <button onclick="submitGuestbook()" class="w-full bg-[#3a3226] text-white py-6 rounded-[1.5rem] font-sans text-[11px] font-bold tracking-[0.4em] shadow-xl hover:bg-[#524635] transition-all uppercase">
+    Send Love & Confirm
+</button>
                     <div class="mt-24 border-t border-gray-100 pt-20">
                         <h4 class="font-luxury text-2xl font-bold mb-12 text-gray-400 italic">Congratulations Feed</h4>
                         <div id="messagesFeed" class="guest-scroll">
@@ -428,6 +543,35 @@
             document.getElementById('gMsg').value = '';
             alert("Attendance confirmed and message sent! ❤️");
         }
+                function addToGoogleCalendar() {
+            const event = {
+                title: 'Wedding of Yasser & Aya 💍',
+                location: 'Solitaire Hall, Maadi, Cairo',
+                start: '20260427T180000',
+                end: '20260427T235900'
+            };
+            const url = `https://www.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(event.title)}&dates=${event.start}/${event.end}&location=${encodeURIComponent(event.location)}`;
+            window.open(url, '_blank');
+        }
+function uniteAndOpen() {
+    const env = document.getElementById('main-env');
+    const overlay = document.getElementById('intro-overlay');
+
+    // 1. إضافة كلاس "الفك" لبدء أنيميشن الحبل والظرف
+    env.classList.add('untying');
+
+    // 2. بعد انتهاء الأنيميشن (800ms) يتم إخفاء الـ Overlay بالكامل
+    setTimeout(() => {
+        overlay.style.opacity = '0';
+        overlay.style.pointerEvents = 'none';
+        
+        setTimeout(() => {
+            overlay.remove();
+            document.getElementById('main-content').classList.remove('hidden');
+            startExperience(); // تشغيل العداد والفراشات في الموقع الأصلي
+        }, 800);
+    }, 800);
+}
     </script>
 </body>
 </html>

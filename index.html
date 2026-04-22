@@ -1,0 +1,447 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wedding of Yasser & Aya</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Montserrat:wght@300;400;600;700&family=Pinyon+Script&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --gold: #c5a059;
+            --cream: #fdfaf6;
+            --navy: #0c1425;
+            --dark-text: #1a1a1a;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--cream);
+            color: var(--dark-text);
+            margin: 0;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        .font-luxury { font-family: 'Cinzel', serif; }
+        .font-script { font-family: 'Pinyon Script', cursive; }
+
+        /* --- Royal Envelope Overlay (Midnight Navy) --- */
+        #intro-overlay {
+            position: fixed;
+            inset: 0;
+            background-color: #f0ede4;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 1.2s cubic-bezier(0.8, 0, 0.2, 1);
+        }
+
+        .exact-envelope {
+            width: 320px;
+            height: 480px;
+            background-color: var(--navy);
+            border: 8px solid var(--gold);
+            position: relative;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px 20px;
+            box-shadow: 0 40px 100px rgba(0,0,0,0.4), inset 0 0 50px rgba(0,0,0,0.3);
+            transition: transform 0.4s;
+        }
+
+        .exact-envelope:hover { transform: scale(1.03); }
+
+        .inner-border {
+            position: absolute;
+            inset: 12px;
+            border: 1px solid rgba(197, 160, 89, 0.3);
+            pointer-events: none;
+        }
+
+        .gold-circle {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            border: 2px solid var(--gold);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 30px rgba(197, 160, 89, 0.5);
+            margin-bottom: 40px;
+            margin-top: 20px;
+        }
+
+        .seal-initials { color: var(--gold); font-family: 'Cinzel', serif; font-size: 22px; font-weight: bold; }
+        .inv-label { color: white; font-family: 'Cinzel', serif; letter-spacing: 4px; font-size: 11px; margin-bottom: 12px; text-transform: uppercase; }
+        .gold-line { width: 60px; height: 1.5px; background-color: var(--gold); margin-bottom: 35px; }
+        .envelope-names { font-family: 'Pinyon Script', cursive; color: var(--gold); font-size: 44px; margin-bottom: 50px; text-shadow: 0 0 10px rgba(0,0,0,0.5); }
+        .tap-msg { color: #64748b; font-size: 10px; letter-spacing: 3px; text-transform: uppercase; margin-top: auto; margin-bottom: 15px; }
+        .env-date { color: var(--gold); font-family: 'Cinzel', serif; font-size: 11px; letter-spacing: 2px; font-weight: bold; }
+
+        /* --- Content Styling --- */
+        .white-card {
+            background: #ffffff;
+            border-radius: 2.5rem;
+            padding: 3rem 1.5rem;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.03);
+            border: 1px solid rgba(197, 160, 89, 0.1);
+        }
+
+        /* Yellow Particles */
+        .particle {
+            position: fixed; pointer-events: none; z-index: 50;
+            color: #FFD700; animation: flyUp var(--duration) linear forwards; opacity: 0;
+        }
+        @keyframes flyUp {
+            0% { transform: translate(0, 0) scale(0) rotate(0deg); opacity: 0; }
+            20% { opacity: 0.8; transform: scale(1); }
+            100% { transform: translate(var(--tw-x), var(--tw-y)) rotate(var(--tw-r)); opacity: 0; }
+        }
+
+        .reveal { opacity: 0; transform: translateY(30px); transition: 1s ease-out; }
+        .reveal.visible { opacity: 1; transform: translateY(0); }
+
+        /* Lightbox */
+        #lightbox {
+            display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.96);
+            z-index: 2000; align-items: center; justify-content: center; padding: 20px;
+        }
+        #lb-img { border: 6px solid white; border-radius: 8px; max-width: 100%; max-height: 90vh; }
+
+        /* Guestbook Scroll */
+        .guest-scroll {
+            max-height: 400px; overflow-y: auto; padding-right: 10px;
+        }
+        .guest-scroll::-webkit-scrollbar { width: 4px; }
+        .guest-scroll::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 10px; }
+
+        .guest-item {
+            background: #ffffff; border-right: 4px solid var(--gold); padding: 1.25rem; border-radius: 0.75rem; margin-bottom: 1rem;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.02); animation: fadeIn 0.6s ease-out;
+            text-align: right;
+        }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+
+    <!-- Intro Envelope Screen (Navy Design) -->
+    <div id="intro-overlay">
+        <div class="exact-envelope" onclick="openInvitation()">
+            <div class="inner-border"></div>
+            <div class="gold-circle">
+                <span class="seal-initials">Y&A</span>
+            </div>
+            <h2 class="inv-label">Wedding Invitation</h2>
+            <div class="gold-line"></div>
+            <p class="envelope-names">Yasser & Aya</p>
+            <div class="tap-msg">Tap To Reveal</div>
+            <div class="env-date">April 27, 2026</div>
+        </div>
+    </div>
+
+    <!-- Main Content (Luxury Cream Theme) -->
+    <div id="main-content" class="hidden">
+        
+        <!-- Hero Section -->
+        <section class="h-screen flex flex-col items-center justify-center text-center px-6 relative bg-white overflow-hidden">
+            <div class="absolute inset-0 opacity-10 pointer-events-none" style="background-image: url('https://www.transparenttextures.com/patterns/natural-paper.png');"></div>
+            <div class="z-10">
+                <p class="font-sans text-[10px] tracking-[1em] text-gray-400 mb-12 font-bold uppercase reveal italic">In the Name of Love</p>
+                <h1 class="font-luxury text-7xl md:text-9xl text-[#1e293b] font-bold reveal">YASSER</h1>
+                <div class="flex items-center justify-center gap-6 my-10 reveal">
+                    <div class="h-[1.5px] w-20 bg-gold/30"></div>
+                    <span class="font-script text-6xl text-gold">&</span>
+                    <div class="h-[1.5px] w-20 bg-gold/30"></div>
+                </div>
+                <h1 class="font-luxury text-7xl md:text-9xl text-[#1e293b] font-bold reveal">AYA</h1>
+                <div class="mt-16 reveal">
+                    <p class="font-luxury text-2xl tracking-[0.4em] font-bold">MONDAY, APRIL 27, 2026</p>
+                    <div class="w-1 h-20 bg-gradient-to-b from-gold to-transparent mx-auto mt-10"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Countdown -->
+        <section class="py-24 bg-[#fdfaf6] border-y border-gold/10">
+            <div class="max-w-4xl mx-auto px-6 text-center reveal">
+                <h3 class="font-luxury text-lg tracking-[0.4em] mb-16 text-gray-400 font-bold uppercase">The Countdown to Forever</h3>
+                <div class="grid grid-cols-4 gap-4 md:gap-12" id="timer">
+                    <div class="bg-white p-6 rounded-3xl shadow-sm border border-gold/5 transition-transform hover:scale-105 duration-300">
+                        <span id="days" class="text-4xl md:text-6xl font-luxury font-bold text-[#1e293b]">00</span>
+                        <p class="text-[9px] uppercase tracking-widest mt-4 opacity-40 font-bold">Days</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-3xl shadow-sm border border-gold/5 transition-transform hover:scale-105 duration-300">
+                        <span id="hours" class="text-4xl md:text-6xl font-luxury font-bold text-[#1e293b]">00</span>
+                        <p class="text-[9px] uppercase tracking-widest mt-4 opacity-40 font-bold">Hours</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-3xl shadow-sm border border-gold/5 transition-transform hover:scale-105 duration-300">
+                        <span id="minutes" class="text-4xl md:text-6xl font-luxury font-bold text-[#1e293b]">00</span>
+                        <p class="text-[9px] uppercase tracking-widest mt-4 opacity-40 font-bold">Mins</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-3xl shadow-sm border border-gold/5 transition-transform hover:scale-105 duration-300">
+                        <span id="seconds" class="text-4xl md:text-6xl font-luxury font-bold text-[#1e293b]">00</span>
+                        <p class="text-[9px] uppercase tracking-widest mt-4 opacity-40 font-bold">Secs</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Timeline Section (Full Information) -->
+        <section class="py-32 px-6 bg-white">
+            <div class="max-w-3xl mx-auto">
+                <div class="text-center mb-20 reveal">
+                    <h2 class="font-luxury text-4xl font-bold mb-4 uppercase">Our Milestones</h2>
+                    <div class="w-16 h-[2.5px] bg-gold mx-auto"></div>
+                </div>
+                
+                <div class="space-y-20 relative">
+                    <div class="absolute left-1/2 top-0 bottom-0 w-[1px] bg-gray-100 -translate-x-1/2"></div>
+                    
+                    <div class="relative flex flex-col items-center md:flex-row gap-10 reveal">
+                        <div class="z-10 w-6 h-6 rounded-full bg-gold border-4 border-white shadow-lg"></div>
+                        <div class="md:flex-1 bg-[#fdfaf6] p-10 rounded-[2.5rem] border border-gold/10 w-full text-center shadow-sm">
+                            <span class="text-gold font-bold text-xs uppercase tracking-widest">October 1st, 2024</span>
+                            <h3 class="font-luxury text-2xl font-bold mt-2 uppercase">Engaged (Fatiha)</h3>
+                            <p class="font-sans text-sm opacity-60 mt-4 leading-relaxed">The beautiful start of our shared destiny and a promise for a lifetime.</p>
+                        </div>
+                    </div>
+
+                    <div class="relative flex flex-col items-center md:flex-row-reverse gap-10 reveal">
+                        <div class="z-10 w-6 h-6 rounded-full bg-gold border-4 border-white shadow-lg"></div>
+                        <div class="md:flex-1 bg-[#fdfaf6] p-10 rounded-[2.5rem] border border-gold/10 w-full text-center shadow-sm">
+                            <span class="text-gold font-bold text-xs uppercase tracking-widest">April 16th, 2026</span>
+                            <h3 class="font-luxury text-2xl font-bold mt-2 uppercase">Marriage Contract</h3>
+                            <p class="font-sans text-sm opacity-60 mt-4 leading-relaxed">Officially becoming one before God, signing our names into eternity.</p>
+                        </div>
+                    </div>
+
+                    <div class="relative flex flex-col items-center md:flex-row gap-10 reveal">
+                        <div class="z-10 w-6 h-6 rounded-full bg-gold border-4 border-white shadow-lg"></div>
+                        <div class="md:flex-1 bg-[#fdfaf6] p-10 rounded-[2.5rem] border border-gold/10 w-full text-center shadow-sm">
+                            <span class="text-gold font-bold text-xs uppercase tracking-widest">April 27th, 2026</span>
+                            <h3 class="font-luxury text-2xl font-bold mt-2 uppercase">Wedding Night</h3>
+                            <p class="font-sans text-sm opacity-60 mt-4 leading-relaxed">The grand celebration where our story reaches its most beautiful chapter.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Gallery Section -->
+        <section class="py-32 px-6 bg-[#fdfaf6]">
+            <div class="max-w-6xl mx-auto">
+                <div class="text-center mb-20 reveal">
+                    <h2 class="font-luxury text-4xl font-bold mb-4 uppercase">Moments of Us</h2>
+                    <p class="font-script text-4xl text-gold">Cherished Memories</p>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div class="reveal overflow-hidden rounded-3xl shadow-xl cursor-pointer group border-4 border-white transition-transform hover:-translate-y-2 duration-500" onclick="openLightbox('https://i.ibb.co/fVsZmNcm/27c055afdb9daf5bd3881757f47ee3db.jpg')">
+                        <img src="https://i.ibb.co/fVsZmNcm/27c055afdb9daf5bd3881757f47ee3db.jpg" class="w-full h-80 object-cover transition-transform duration-700 group-hover:scale-110" alt="Moment 1">
+                    </div>
+                    <div class="reveal overflow-hidden rounded-3xl shadow-xl cursor-pointer group border-4 border-white transition-transform hover:-translate-y-2 duration-500" onclick="openLightbox('https://i.ibb.co/99VRCCZB/b47db8a716ccf07f6a0ffe951d6d5d69.jpg')">
+                        <img src="https://i.ibb.co/99VRCCZB/b47db8a716ccf07f6a0ffe951d6d5d69.jpg" class="w-full h-80 object-cover transition-transform duration-700 group-hover:scale-110" alt="Moment 2">
+                    </div>
+                    <div class="reveal overflow-hidden rounded-3xl shadow-xl cursor-pointer group border-4 border-white transition-transform hover:-translate-y-2 duration-500" onclick="openLightbox('https://i.ibb.co/m5rLtnQv/f6513592d5c71947c9ce60a35759326b.jpg')">
+                        <img src="https://i.ibb.co/m5rLtnQv/f6513592d5c71947c9ce60a35759326b.jpg" class="w-full h-80 object-cover transition-transform duration-700 group-hover:scale-110" alt="Moment 3">
+                    </div>
+                    <div class="reveal overflow-hidden rounded-3xl shadow-xl cursor-pointer group border-4 border-white transition-transform hover:-translate-y-2 duration-500" onclick="openLightbox('https://i.ibb.co/MLJZVnc/f97ea39d111adf852b71b65fca8c9768.jpg')">
+                        <img src="https://i.ibb.co/MLJZVnc/f97ea39d111adf852b71b65fca8c9768.jpg" class="w-full h-80 object-cover transition-transform duration-700 group-hover:scale-110" alt="Moment 4">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Location Section -->
+        <section class="py-32 bg-white px-6">
+            <div class="max-w-4xl mx-auto text-center reveal">
+                <div class="white-card p-12 md:p-24 relative overflow-hidden group">
+                    <div class="absolute -top-10 -right-10 w-40 h-40 bg-gold/5 rounded-full transition-transform group-hover:scale-150 duration-700"></div>
+                    
+                    <div class="w-20 h-20 bg-cream rounded-full flex items-center justify-center mx-auto mb-10 shadow-inner border border-gold/10">
+                        <svg class="w-10 h-10 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                    </div>
+                    
+                    <h2 class="font-luxury text-3xl font-bold uppercase mb-4 opacity-40 tracking-[0.3em]">The Celebration Venue</h2>
+                    <a href="https://maps.app.goo.gl/3K6Ua3z6y3z6y3z6" target="_blank" class="block my-10">
+                        <h3 class="font-luxury text-5xl md:text-7xl font-bold text-[#1e293b] hover:text-gold transition-colors duration-300">Solitaire Hall Maadi</h3>
+                        <div class="h-[2px] w-24 bg-gold mx-auto mt-6"></div>
+                    </a>
+                    <p class="font-sans text-sm tracking-widest opacity-50 uppercase font-bold mb-14">Corniche El Maadi, Cairo, Egypt</p>
+                    
+                    <a href="https://maps.app.goo.gl/3K6Ua3z6y3z6y3z6" target="_blank" class="inline-block bg-[#1e293b] text-white px-16 py-5 rounded-full font-sans text-[11px] font-bold tracking-[0.4em] shadow-xl hover:bg-black transition-all transform hover:-translate-y-1">
+                        GET DIRECTIONS
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- RSVP & Guestbook Section -->
+        <section class="py-32 bg-[#fdfaf6]">
+            <div class="max-w-2xl mx-auto px-6 text-center reveal">
+                <div class="white-card">
+                    <div class="mb-10 text-gold">
+                        <svg class="w-12 h-12 mx-auto" fill="currentColor" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"></path></svg>
+                    </div>
+                    <h3 class="font-luxury text-4xl font-bold mb-4 uppercase">Confirm Your Presence</h3>
+                    <p class="font-sans text-[10px] tracking-widest opacity-40 mb-14 uppercase font-bold italic">Share your joy with Yasser & Aya</p>
+                    
+                    <div class="space-y-6 text-left">
+                        <input type="text" id="gName" placeholder="YOUR FULL NAME" class="w-full bg-cream/30 border-b-2 border-gray-100 py-5 px-4 focus:outline-none focus:border-gold font-sans text-xs tracking-widest uppercase font-bold transition-colors">
+                        <textarea id="gMsg" rows="3" placeholder="CONGRATULATIONS & SWEET MESSAGES..." class="w-full bg-cream/30 border-b-2 border-gray-100 py-5 px-4 focus:outline-none focus:border-gold font-sans text-xs tracking-widest uppercase font-bold resize-none transition-colors"></textarea>
+                        
+                        <div class="text-center pt-8">
+                            <button onclick="submitGuestbook()" class="w-full bg-gold text-white py-6 rounded-[1.5rem] font-sans text-[11px] font-bold tracking-[0.4em] shadow-xl hover:bg-[#b39373] transition-all uppercase">
+                                Send Love & Confirm
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Guestbook Feed (كلام المهنئين) -->
+                    <div class="mt-24 border-t border-gray-100 pt-20">
+                        <h4 class="font-luxury text-2xl font-bold mb-12 text-gray-400 italic">Congratulations Feed</h4>
+                        <div id="messagesFeed" class="guest-scroll">
+                            <div class="guest-item">
+                                <p class="text-[10px] font-bold text-gold uppercase tracking-widest mb-2">Friends & Family</p>
+                                <p class="text-sm opacity-70 italic leading-relaxed">"ألف مبروك لأجمل عرسان، ربنا يتمم لكم على خير ويسعد أيامكم يا رب! ننتظر ليلتكم الكبيرة بفارغ الصبر. ❤️"</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="py-24 text-center bg-[#1e293b] text-white">
+            <p class="font-luxury text-3xl font-bold tracking-[0.5em] mb-4 uppercase">YASSER & AYA</p>
+            <p class="font-sans text-[9px] tracking-[0.8em] opacity-30 font-bold uppercase italic tracking-tighter">Forever and Always • 2026</p>
+        </footer>
+    </div>
+
+    <!-- Lightbox Modal -->
+    <div id="lightbox" onclick="closeLightbox()">
+        <img id="lb-img" src="" alt="Enlarged Moment">
+    </div>
+
+    <script>
+        // Opening Logic
+        function openInvitation() {
+            const overlay = document.getElementById('intro-overlay');
+            overlay.style.transform = 'translateY(-100%) scale(1.5)';
+            overlay.style.opacity = '0';
+            
+            setTimeout(() => {
+                overlay.remove();
+                document.getElementById('main-content').classList.remove('hidden');
+                startExperience();
+            }, 1200);
+        }
+
+        function startExperience() {
+            spawnYellowParticles();
+            startCountdown();
+            initScrollObserver();
+        }
+
+        // Particle System (Yellow Butterflies & Hearts)
+        function spawnYellowParticles() {
+            const symbols = ['🦋', '❤️', '✨'];
+            setInterval(() => {
+                const p = document.createElement('div');
+                p.className = 'particle';
+                const type = symbols[Math.floor(Math.random() * symbols.length)];
+                p.innerText = type;
+                
+                const startX = Math.random() * window.innerWidth;
+                const duration = Math.random() * 5 + 7;
+                const endX = (Math.random() - 0.5) * 800;
+                const endY = -(window.innerHeight + 400);
+                
+                p.style.left = startX + 'px';
+                p.style.bottom = '-60px';
+                p.style.fontSize = type === '🦋' ? '28px' : '15px';
+                p.style.setProperty('--duration', duration + 's');
+                p.style.setProperty('--tw-x', endX + 'px');
+                p.style.setProperty('--tw-y', endY + 'px');
+                p.style.setProperty('--tw-r', (Math.random() * 720) + 'deg');
+                
+                document.body.appendChild(p);
+                setTimeout(() => p.remove(), duration * 1000);
+            }, 1000);
+        }
+
+        // Countdown Logic (April 27, 2026)
+        function startCountdown() {
+            const target = new Date("April 27, 2026 18:00:00").getTime();
+            function update() {
+                const now = new Date().getTime();
+                const gap = target - now;
+                if(gap < 0) return;
+
+                const d = Math.floor(gap / (1000 * 60 * 60 * 24));
+                const h = Math.floor((gap % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const m = Math.floor((gap % (1000 * 60 * 60)) / (1000 * 60));
+                const s = Math.floor((gap % (1000 * 60)) / 1000);
+
+                document.getElementById('days').innerText = d < 10 ? '0'+d : d;
+                document.getElementById('hours').innerText = h < 10 ? '0'+h : h;
+                document.getElementById('minutes').innerText = m < 10 ? '0'+m : m;
+                document.getElementById('seconds').innerText = s < 10 ? '0'+s : s;
+            }
+            setInterval(update, 1000);
+            update();
+        }
+
+        // Intersection Observer for Reveal Animations
+        function initScrollObserver() {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); });
+            }, { threshold: 0.1 });
+            document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+        }
+
+        // Lightbox Utility
+        function openLightbox(url) {
+            const lb = document.getElementById('lightbox');
+            document.getElementById('lb-img').src = url;
+            lb.style.display = 'flex';
+        }
+        function closeLightbox() {
+            document.getElementById('lightbox').style.display = 'none';
+        }
+
+        // Guestbook Logic
+        function submitGuestbook() {
+            const name = document.getElementById('gName').value.trim();
+            const msg = document.getElementById('gMsg').value.trim();
+            
+            if(!name || !msg) {
+                alert("Please share your name and a sweet message! ❤️");
+                return;
+            }
+
+            const feed = document.getElementById('messagesFeed');
+            const entry = document.createElement('div');
+            entry.className = 'guest-item';
+            entry.innerHTML = `
+                <p class="text-[10px] font-bold text-gold uppercase tracking-widest mb-2">${name}</p>
+                <p class="text-sm opacity-70 italic leading-relaxed">"${msg}"</p>
+            `;
+            
+            feed.prepend(entry);
+            
+            // Clear inputs
+            document.getElementById('gName').value = '';
+            document.getElementById('gMsg').value = '';
+            alert("Attendance confirmed and message sent! ❤️");
+        }
+    </script>
+</body>
+</html>
+
+```
